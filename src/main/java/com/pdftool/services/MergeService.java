@@ -18,6 +18,7 @@ public class MergeService {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             merger.setDestinationStream(outputStream);
 
+
             for (MultipartFile pdf : files) {
                 merger.addSource(pdf.getInputStream());
             }
