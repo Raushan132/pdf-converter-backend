@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/pdf")
+@CrossOrigin
 public class PageNoController {
 
     @Autowired
