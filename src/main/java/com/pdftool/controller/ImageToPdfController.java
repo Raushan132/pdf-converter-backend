@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/pdf")
+@CrossOrigin
+@RequestMapping("/pdf")
 public class ImageToPdfController {
 
     @Autowired
