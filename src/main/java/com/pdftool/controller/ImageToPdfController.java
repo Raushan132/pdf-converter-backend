@@ -1,5 +1,6 @@
 package com.pdftool.controller;
 
+import com.pdftool.models.PDFResponseDTO;
 import com.pdftool.services.ImageToPdfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -23,6 +24,21 @@ public class ImageToPdfController {
                     .contentType(MediaType.APPLICATION_PDF)
                     .body(pdf);
         } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
+    @PostMapping("/image-to-pdf-file")
+    public ResponseEntity<PDFResponseDTO> convertImagetoPdfFile(@RequestParam("files") MultipartFile[] files){
+
+        try {
+          String data=  imageToPdfService.convertImagesToPdfFile(files);
+          PDFResponseDTO response=new PDFResponseDTO();
+          response.setFileName(data);
+          return ResponseEntity.ok()
+                  .body(response);
+        }catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
