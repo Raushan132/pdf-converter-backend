@@ -30,7 +30,7 @@ public class ImageToPdfService {
                 );
 
                 float width = img.getWidth() * scale;
-                float height = img.getHeight() * scale;g
+                float height = img.getHeight() * scale;
                 float x = (PDRectangle.A4.getWidth() - width) / 2;
                 float y = (PDRectangle.A4.getHeight() - height) / 2;
 
