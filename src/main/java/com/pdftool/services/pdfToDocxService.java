@@ -17,30 +17,35 @@ public class pdfToDocxService {
 	@SuppressWarnings("resource")
 	public String convertPdfToDocx(File pdfFile) throws IOException {
 
-		/**
-		 * 1. Extract text from pdf 2. CREATE DOCX document 3. save to temp directory
-		 */
 
-		// 1. Extract text from pdf
-		PDDocument document = PDDocument.load(pdfFile);
-		PDFTextStripper pdfStripper = new PDFTextStripper();
-		String text = pdfStripper.getText(document);
-		document.close();
+	    // Step 1: Extract text from PDF
+	    PDDocument document = PDDocument.load(pdfFile);
+	    PDFTextStripper pdfStripper = new PDFTextStripper();
+	    String text = pdfStripper.getText(document);
+	    document.close();
 
-		// 2. Create Docx document
-		XWPFDocument docx = new XWPFDocument();
-		XWPFParagraph paragraph = docx.createParagraph();
-		XWPFRun run = paragraph.createRun();
-		run.setText(text);
+	    // Step 2: Create DOCX using Apache POI
+	    XWPFDocument docx = new XWPFDocument();
 
-		// 3. save to temp directory
-		String tempDir = System.getProperty("java.io.tempdir");
-		File docxFile = new File(tempDir, pdfFile.getName().replace(".pdf", ".docx"));
-		try (FileOutputStream out = new FileOutputStream(docxFile)) {
-			docx.write(out);
-		}
+	    // Step 3: Split text by lines to preserve paragraph structure
+	    String[] lines = text.split("\r\n|\r|\n");
+	    for (String line : lines) {
+	        XWPFParagraph paragraph = docx.createParagraph();
+	        XWPFRun run = paragraph.createRun();
+	        run.setFontFamily("Times New Roman");
+	        run.setFontSize(12);
+	        run.setText(line);
+	    }
 
-		return docxFile.getAbsolutePath();
+	    // Step 4: Save DOCX to temp directory
+	    String tempDir = System.getProperty("java.io.tmpdir");
+	    String docxFileName = pdfFile.getName().replace(".pdf", "") + "_" + System.currentTimeMillis() + ".docx";
+	    File docxFile = new File(tempDir, docxFileName);
 
+	    try (FileOutputStream out = new FileOutputStream(docxFile)) {
+	        docx.write(out);
+	    }
+
+	    return docxFile.getAbsolutePath();
 	}
 }
